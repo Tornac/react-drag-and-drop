@@ -35,7 +35,7 @@ function DraggableCircle(props) {
       cy={props.y}
       fill={props.color}
       stroke={isBeingDragged ? 'magenta' : ''}
-      stroke-width="5"
+      strokeWidth="5"
       onPointerDown={onDragStart}
       onPointerUp={onDragStop}
       onPointerMove={onDragMove}
