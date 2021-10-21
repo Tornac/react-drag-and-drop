@@ -1,59 +1,15 @@
 import React from 'react';
 import './style.css';
 import { uniqueId } from 'lodash';
-
-function DraggableCircle(props) {
-  const [isBeingDragged, setBeingDragged] = React.useState(false);
-  function moveCircle(event) {
-    const ctm = event.target.parentElement.getScreenCTM();
-
-    let touch = event;
-    if (event.touches) touch = event.touches[0] || touch;
-
-    const newCircle = {
-      id: props.id,
-      r: props.r,
-      x: (touch.clientX - ctm.e) / ctm.a,
-      y: (touch.clientY - ctm.f) / ctm.d,
-      color: props.color,
-    };
-    props.updateCircle(newCircle);
-  }
-  function onDragStart(event) {
-    setBeingDragged(true);
-    moveCircle(event);
-  }
-  function onDragMove(event) {
-    if (!isBeingDragged) return;
-    moveCircle(event);
-  }
-  function onDragStop(event) {
-    setBeingDragged(false);
-    //moveCircle(event);
-  }
-  return (
-    <circle
-      r={props.r}
-      cx={props.x}
-      cy={props.y}
-      fill={props.color}
-      stroke={isBeingDragged ? 'magenta' : ''}
-      strokeWidth="5"
-      onTouchStart={onDragStart}
-      onTouchEnd={onDragStop}
-      onTouchMove={onDragMove}
-      onMouseDown={onDragStart}
-      onMouseMove={onDragMove}
-      onMouseUp={onDragStop}
-    />
-  );
-}
+import DraggableCircle from './DraggableCircle.js';
 
 export default function App() {
+  const [width, setWidth] = React.useState(200);
+  const [height, setHeight] = React.useState(400);
   const [circles, setCircles] = React.useState([
-    { id: uniqueId(), r: 20, x: 100, y: 100, color: 'red' },
-    { id: uniqueId(), r: 30, x: 150, y: 150, color: 'blue' },
-    { id: uniqueId(), r: 40, x: 200, y: 200, color: 'orange' },
+    { id: uniqueId(), r: 20, x: 50, y: 50, color: 'red' },
+    { id: uniqueId(), r: 30, x: 50, y: 50, color: 'blue' },
+    { id: uniqueId(), r: 40, x: 50, y: 50, color: 'orange' },
   ]);
   function updateCircle(newCircle) {
     //using filter changes the index of the element every time
@@ -65,7 +21,7 @@ export default function App() {
   }
   return (
     <div>
-      <svg>
+      <svg style={{ width: width, height: height }}>
         {[...circles]
           .sort((it) => -it.r)
           .map((it) => (
@@ -77,6 +33,10 @@ export default function App() {
               y={it.y}
               color={it.color}
               updateCircle={updateCircle}
+              xMin={0}
+              xMax={width}
+              yMin={0}
+              yMax={height}
             />
           ))}
       </svg>
