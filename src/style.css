@@ -8,9 +8,10 @@ svg {
   margin: auto;
   width: min(80vw, 80vh);
   height: min(80vw, 80vh);
+  touch-action: none;
 }
 
 td,
 th {
-  text-align: right;
+  text-align: center;
 }

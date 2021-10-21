@@ -6,18 +6,21 @@ function DraggableCircle(props) {
   const [isBeingDragged, setBeingDragged] = React.useState(false);
   function moveCircle(event) {
     const ctm = event.target.parentElement.getScreenCTM();
+
+    let touch = event;
+    if (event.touches) touch = event.touches[0] || touch;
+
     const newCircle = {
       id: props.id,
       r: props.r,
-      x: (event.clientX - ctm.e) / ctm.a,
-      y: (event.clientY - ctm.f) / ctm.d,
+      x: (touch.clientX - ctm.e) / ctm.a,
+      y: (touch.clientY - ctm.f) / ctm.d,
       color: props.color,
     };
     props.updateCircle(newCircle);
   }
   function onDragStart(event) {
     setBeingDragged(true);
-    event.target.setPointerCapture(event.pointerId);
     moveCircle(event);
   }
   function onDragMove(event) {
@@ -26,7 +29,7 @@ function DraggableCircle(props) {
   }
   function onDragStop(event) {
     setBeingDragged(false);
-    moveCircle(event);
+    //moveCircle(event);
   }
   return (
     <circle
@@ -36,9 +39,12 @@ function DraggableCircle(props) {
       fill={props.color}
       stroke={isBeingDragged ? 'magenta' : ''}
       strokeWidth="5"
-      onPointerDown={onDragStart}
-      onPointerUp={onDragStop}
-      onPointerMove={onDragMove}
+      onTouchStart={onDragStart}
+      onTouchEnd={onDragStop}
+      onTouchMove={onDragMove}
+      onMouseDown={onDragStart}
+      onMouseMove={onDragMove}
+      onMouseUp={onDragStop}
     />
   );
 }
@@ -78,8 +84,8 @@ export default function App() {
         <tr>
           <th>Id</th>
           <th>Radius</th>
-          <th>Center X</th>
-          <th>Center Y</th>
+          <th>X</th>
+          <th>Y</th>
           <th>Color</th>
         </tr>
         {circles.map((it) => (
