@@ -1,0 +1,16 @@
+h1,
+p {
+  font-family: Lato;
+}
+
+svg {
+  border: 1px solid black;
+  margin: auto;
+  width: min(80vw, 80vh);
+  height: min(80vw, 80vh);
+}
+
+td,
+th {
+  text-align: right;
+}
