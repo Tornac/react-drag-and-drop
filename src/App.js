@@ -1,7 +1,8 @@
 import React from 'react';
 import './style.css';
 import { uniqueId } from 'lodash';
-import DraggableCircle from './DraggableCircle.js';
+import ShapeSvg from './ShapeSvg';
+import CirclesTable from './CirclesTable.js';
 
 export default function App() {
   const [width, setWidth] = React.useState(200);
@@ -21,43 +22,13 @@ export default function App() {
   }
   return (
     <div>
-      <svg style={{ width: width, height: height }}>
-        {[...circles]
-          .sort((it) => -it.r)
-          .map((it) => (
-            <DraggableCircle
-              key={it.id}
-              id={it.id}
-              r={it.r}
-              x={it.x}
-              y={it.y}
-              color={it.color}
-              updateCircle={updateCircle}
-              xMin={0}
-              xMax={width}
-              yMin={0}
-              yMax={height}
-            />
-          ))}
-      </svg>
-      <table>
-        <tr>
-          <th>Id</th>
-          <th>Radius</th>
-          <th>X</th>
-          <th>Y</th>
-          <th>Color</th>
-        </tr>
-        {circles.map((it) => (
-          <tr key={it.id}>
-            <td>{it.id}</td>
-            <td>{it.r}</td>
-            <td>{Math.round(it.x)}</td>
-            <td>{Math.round(it.y)}</td>
-            <th style={{ color: it.color }}>{it.color}</th>
-          </tr>
-        ))}
-      </table>
+      <ShapeSvg
+        width={width}
+        height={height}
+        circles={circles}
+        updateCircle={updateCircle}
+      />
+      <CirclesTable circles={circles} />
     </div>
   );
 }
