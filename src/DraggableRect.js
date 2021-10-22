@@ -1,48 +1,48 @@
 import React from 'react'
 
-export default function DraggableCircle(props) {
+export default function DraggableRect(props) {
     const [isBeingDragged, setBeingDragged] = React.useState(false)
-    function moveCircle(event) {
+    function move(event) {
         const ctm = event.target.parentElement.getScreenCTM()
 
         let touch = event
         if (event.touches) touch = event.touches[0] || touch
 
-        let xNew = (touch.clientX - ctm.e) / ctm.a
-        let yNew = (touch.clientY - ctm.f) / ctm.d
+        let xNew = (touch.clientX - ctm.e) / ctm.a - 0.5 * props.w
+        let yNew = (touch.clientY - ctm.f) / ctm.d - 0.5 * props.h
 
-        if (xNew - props.r < props.xMin) xNew = props.xMin + props.r
-        if (xNew + props.r > props.xMax) xNew = props.xMax - props.r
-        if (yNew - props.r < props.yMin) yNew = props.yMin + props.r
-        if (yNew + props.r > props.yMax) yNew = props.yMax - props.r
+        if (xNew < props.xMin) xNew = 0
+        if (xNew + props.w > props.xMax) xNew = props.xMax - props.w
+        if (yNew < props.yMin) yNew = 0
+        if (yNew + props.h > props.yMax) yNew = props.yMax - props.h
 
-        const newCircle = {
+        props.updateShape({
             id: props.id,
-            type: 'circle',
-            r: props.r,
+            type: 'rect',
             x: xNew,
             y: yNew,
+            w: props.w,
+            h: props.h,
             color: props.color,
-        }
-        props.updateCircle(newCircle)
+        })
     }
     function onDragStart(event) {
         setBeingDragged(true)
-        moveCircle(event)
+        move(event)
     }
     function onDragMove(event) {
         if (!isBeingDragged) return
-        moveCircle(event)
+        move(event)
     }
     function onDragStop(event) {
         setBeingDragged(false)
-        //moveCircle(event);
     }
     return (
-        <circle
-            r={props.r}
-            cx={props.x}
-            cy={props.y}
+        <rect
+            x={props.x}
+            y={props.y}
+            width={props.w}
+            height={props.h}
             fill={props.color}
             stroke={isBeingDragged ? 'magenta' : ''}
             strokeWidth="5"

@@ -1,36 +1,26 @@
-import React from "react"
-import "./style.css"
-import { uniqueId } from "lodash"
-import ShapeSvg from "./ShapeSvg"
-import CirclesTable from "./CirclesTable.js"
+import React from 'react'
+import './style.css'
+import { uniqueId } from 'lodash'
+import ShapeSvg from './ShapeSvg'
+import CirclesTable from './CirclesTable.js'
 
 export default function App() {
     const [width, setWidth] = React.useState(200)
     const [height, setHeight] = React.useState(400)
-    const [circles, setCircles] = React.useState([
-        { id: uniqueId(), r: 20, x: 50, y: 50, color: "red" },
-        { id: uniqueId(), r: 30, x: 50, y: 50, color: "blue" },
-        { id: uniqueId(), r: 40, x: 50, y: 50, color: "orange" },
+    const [shapes, setShapes] = React.useState([
+        { id: uniqueId(), type: 'rect', x: 0, y: 0, w: 50, h: 50, color: 'green' },
+        { id: uniqueId(), type: 'circle', r: 20, x: 50, y: 50, color: 'red' },
     ])
-    function updateCircle(newCircle) {
-        //using filter changes the index of the element every time
-        //setCircles([...circles.filter((it) => it.id !== newCircle.id), newCircle]);
-        let newCircles = []
-        for (let oldCircle of circles)
-            newCircles.push(
-                oldCircle.id === newCircle.id ? newCircle : oldCircle
-            )
-        setCircles(newCircles)
+    function updateShape(newShape) {
+        let newShapes = []
+        for (let oldShape of shapes)
+            newShapes.push(oldShape.id === newShape.id ? newShape : oldShape)
+        setShapes(newShapes)
     }
     return (
         <div>
-            <ShapeSvg
-                width={width}
-                height={height}
-                circles={circles}
-                updateCircle={updateCircle}
-            />
-            <CirclesTable circles={circles} />
+            <ShapeSvg width={width} height={height} shapes={shapes} updateShape={updateShape} />
+            <CirclesTable circles={shapes.filter(it => it.type === 'circle')} />
         </div>
     )
 }
